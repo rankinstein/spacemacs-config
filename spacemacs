@@ -281,7 +281,9 @@ you should place your code here."
   (setq evil-escape-key-sequence "jk")
   (define-key evil-normal-state-map "H" "^")
   (define-key evil-normal-state-map "L" "$")
+  (evil-define-key 'normal term-raw-map "p" 'term-paste)
   )
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
