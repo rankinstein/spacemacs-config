@@ -282,6 +282,8 @@ you should place your code here."
   (define-key evil-normal-state-map "H" "^")
   (define-key evil-normal-state-map "L" "$")
   (evil-define-key 'normal term-raw-map "p" 'term-paste)
+  (evil-ex-define-cmd "vs" 'split-window-right-and-focus)
+  (evil-ex-define-cmd "sp" 'split-window-below-and-focus)
   )
 
 
