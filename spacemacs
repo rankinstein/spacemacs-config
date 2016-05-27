@@ -32,12 +32,13 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     sql
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     spacemacs-helm
+     ;;spacemacs-helm
      auto-completion
      ;; better-defaults
      emacs-lisp
@@ -126,8 +127,8 @@ values."
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
                                :size 13
-                               :weight normal
-                               :width normal
+                               :weight semi-bold
+                               :width condensed
                                :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
@@ -142,7 +143,7 @@ values."
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
    ;; (default "SPC")
-   dotspacemacs-emacs-command-key "SPC"
+   dotspacemacs-emacs-command-key ":"
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs C-i, TAB and C-m, RET.
    ;; Setting it to a non-nil value, allows for separate commands under <C-i>
@@ -199,7 +200,7 @@ values."
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
    dotspacemacs-fullscreen-at-startup nil
@@ -209,7 +210,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -262,6 +263,24 @@ values."
    dotspacemacs-whitespace-cleanup nil
    ))
 
+(defun paste-from-clipboard ()
+  (interactive)
+  (setq x-select-enable-clipboard t)
+  (yank)
+  (setq x-select-enable-clipboard nil))
+
+(defun copy-to-clipboard()
+  (interactive)
+  (setq x-select-enable-clipboard t)
+  (kill-ring-save (region-beginning) (region-end))
+  (setq x-select-enable-clipboard nil))
+
+(defun cut-to-clipboard()
+  (interactive)
+  (setq x-select-enable-clipboard t)
+  (kill-region (region-beginning) (region-end))
+  (setq x-select-enable-clipboard nil))
+
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init', before layer configuration
@@ -284,8 +303,32 @@ you should place your code here."
   (evil-define-key 'normal term-raw-map "p" 'term-paste)
   (evil-ex-define-cmd "vs" 'split-window-right-and-focus)
   (evil-ex-define-cmd "sp" 'split-window-below-and-focus)
+  (setq evil-move-cursor-back nil)
+  (global-set-key (kbd "s-x") 'cut-to-clipboard)
+  (global-set-key (kbd "s-c") 'copy-to-clipboard)
+  (global-set-key (kbd "s-v") 'paste-from-clipboard)
+  (global-set-key (kbd "s-z") 'undo-tree-undo)
+  (global-set-key (kbd "s-Z") 'undo-tree-redo)
+  (global-set-key (kbd "s-d") 'mc/mark-next-word-like-this)
+  (global-set-key (kbd "s-D") 'mc/mark-previous-word-like-this)
+  (global-set-key (kbd "s-e") 'mc/unmark-next-like-this)
+  (global-set-key (kbd "s-E") 'mc/unmark-previous-like-this)
   )
 
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mac-command-modifier (quote super))
+ '(mac-option-modifier (quote (:ordinary meta :function alt :mouse alt))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
