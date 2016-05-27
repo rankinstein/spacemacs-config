@@ -297,13 +297,25 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  ;; VIM escape sequence
   (setq evil-escape-key-sequence "jk")
+
+  ;; Start and end-line remaps
   (define-key evil-normal-state-map "H" "^")
   (define-key evil-normal-state-map "L" "$")
+
+  ;; to fix pasting into the terminal
   (evil-define-key 'normal term-raw-map "p" 'term-paste)
+
+  ;; natural splitting for vs and sp
   (evil-ex-define-cmd "vs" 'split-window-right-and-focus)
   (evil-ex-define-cmd "sp" 'split-window-below-and-focus)
+
+  ;; dont move back a space when leaving insert mode
   (setq evil-move-cursor-back nil)
+
+  ;; Mac-like command key actions
   (global-set-key (kbd "s-x") 'cut-to-clipboard)
   (global-set-key (kbd "s-c") 'copy-to-clipboard)
   (global-set-key (kbd "s-v") 'paste-from-clipboard)
@@ -313,6 +325,9 @@ you should place your code here."
   (global-set-key (kbd "s-D") 'mc/mark-previous-word-like-this)
   (global-set-key (kbd "s-e") 'mc/unmark-next-like-this)
   (global-set-key (kbd "s-E") 'mc/unmark-previous-like-this)
+
+  ;; leader key bindings
+  (spacemacs/set-leader-keys "SPC" 'evil-avy-goto-char)
   )
 
 
